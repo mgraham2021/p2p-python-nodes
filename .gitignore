@@ -1,0 +1,7 @@
+# common files
+env
+
+# PyCharm
+.idea
+
+*.xml
