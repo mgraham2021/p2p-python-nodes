@@ -4,4 +4,4 @@ env
 # PyCharm
 .idea
 
-*.xml
+.idea/*
