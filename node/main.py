@@ -6,11 +6,11 @@ from pyp2p.net import *
 from pyp2p.unl import UNL
 from pyp2p.dht_msg import DHT
 import time
-
-
-
-
 import settings
+
+def child():
+    print('child')
+
 
 
 def main(*args, **kwargs):
@@ -23,4 +23,9 @@ def main(*args, **kwargs):
                       default=0)
     (options, parsed_args) = parser.parse_args()
 
-    newpid = os.fork()
+    for x in range(3):
+        pid = os.fork()
+        if pid == 0:
+            child()
+    os.waitpid(pid, 0)
+    print('parent')
