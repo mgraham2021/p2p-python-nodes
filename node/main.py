@@ -30,13 +30,15 @@ events = {
 def child():
     print('child')
     node_dht = DHT()
-    node_direct = Net(passive_bind="192.168.0.45", passive_port=44444, interface="eth0:2", net_type="direct",
+    node = Net(passive_bind="192.168.0.45", passive_port=44444, interface="eth0:2", net_type="passive",
                        dht_node=node_dht, debug=1)
-    node_direct.start()
+    node.start()
+    node.bootstrap()
+    node.advertise()
 
-    # connect to node
-    node_direct.unl.connect(node_direct.unl.construct(), events)
-
+    while 1:
+        for con in node:
+            con.send_line("test")
 
 def main(*args, **kwargs):
     # args setup
