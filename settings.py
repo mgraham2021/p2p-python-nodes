@@ -1,0 +1,1 @@
+local_nodes = 3

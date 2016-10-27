@@ -8,9 +8,34 @@ from pyp2p.dht_msg import DHT
 import time
 import settings
 
+
+# Callbacks.
+def success(con):
+    print("successfully connected")
+    con.send_line("Sup Bob.")
+
+
+def failure(con):
+    print("connection failure")
+
+
+events = {
+    "success": success,
+    "failure": failure
+}
+
+
+
+
 def child():
     print('child')
+    node_dht = DHT()
+    node_direct = Net(passive_bind="192.168.0.45", passive_port=44444, interface="eth0:2", net_type="direct",
+                       dht_node=node_dht, debug=1)
+    node_direct.start()
 
+    # connect to node
+    node_direct.unl.connect(node_direct.unl.construct(), events)
 
 
 def main(*args, **kwargs):
@@ -23,7 +48,7 @@ def main(*args, **kwargs):
                       default=0)
     (options, parsed_args) = parser.parse_args()
 
-    for x in range(3):
+    for x in range(settings.local_nodes):
         pid = os.fork()
         if pid == 0:
             child()
