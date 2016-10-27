@@ -23,15 +23,19 @@ events = {
     "success": success,
     "failure": failure
 }
+ip_address_counter = 0
 
 
-
+# maybe use the direct connections to set that a broadcast needs to happen to the network
+# want to test before this
 
 def child():
     print('child')
+    global ip_address_counter
+    ip_address_counter += 1
     node_dht = DHT()
-    node = Net(passive_bind="192.168.0.45", passive_port=44444, interface="eth0:2", net_type="passive",
-                       dht_node=node_dht, debug=1)
+    node = Net(passive_bind="192.168.0.4{}".format(ip_address_counter), passive_port=44444, interface="eth0:2",
+               net_type="passive", dht_node=node_dht, debug=1)
     node.start()
     node.bootstrap()
     node.advertise()
