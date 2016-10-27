@@ -39,10 +39,11 @@ def child():
     node.start()
     node.bootstrap()
     node.advertise()
-
     while 1:
+        node.dht_messages = 'hello'
         for con in node:
             con.send_line("test")
+
 
 def main(*args, **kwargs):
     # args setup
