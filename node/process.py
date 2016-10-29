@@ -1,5 +1,6 @@
-from pyp2p.unl import UNL
+
 from pyp2p.dht_msg import DHT
+from pyp2p.net import *
 
 def child():
     print('child')
