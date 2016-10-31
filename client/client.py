@@ -25,20 +25,20 @@ client_direct.start()
 
 # Callbacks.
 def success(con):
-    print("Alice successfully connected to Bob.")
-    con.send_line("Sup Bob.")
+    print("Client successfully connected to Server.")
+    con.send_line("Request.")
 
 
 def failure(con):
-    print("Alice failed to connec to Bob\a")
+    print("Client failed to connect to Server\a")
 
 events = {
     "success": success,
     "failure": failure
 }
 
-# Have the server connect to client.
-node_direct.unl.connect(client_direct.unl.construct(), events)
+# Have the client connect to server.
+client_direct.unl.connect(node_direct.unl.construct(), events)
 
 # Event loop.
 while 1:
