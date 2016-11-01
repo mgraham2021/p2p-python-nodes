@@ -1,16 +1,27 @@
+from kademlia.network import Server
+from twisted.internet import reactor
 
-from pyp2p.dht_msg import DHT
-from pyp2p.net import *
+
+def done(result):
+    print ("Key result:", result)
+    reactor.stop()
+
+
+def setDone(result, server):
+    server.get("a key").addCallback(done)
+
+
+def bootstrapDone(found, server):
+    server.set("a key", "a value").addCallback(setDone, server)
+
+
+
 
 def child(ip_address_counter):
-    print('child')
-    node_dht = DHT()
-    node = Net(passive_bind="192.168.0.4{}".format(ip_address_counter), passive_port=44444, interface="eth0:2",
-               net_type="passive", dht_node=node_dht, debug=1)
-    node.start()
-    node.bootstrap()
-    node.advertise()
-    while 1:
-        node.dht_messages = 'hello'
-        for con in node:
-            con.send_line("test")
+    port = 8468 + ip_address_counter
+    print(port)
+    server = Server()
+    server.listen(port)
+    server.bootstrap([('127.0.0.{}'.format(ip_address_counter),
+                           port)]).addCallback(bootstrapDone, server)
+

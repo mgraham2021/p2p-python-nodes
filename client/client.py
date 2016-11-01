@@ -2,24 +2,31 @@
 # on message
 # create direct connect node
 # send message
-# have recieving node broadcast the message to other peers
+# have receiving node broadcast the message to other peers
 
 from pyp2p.net import *
 from pyp2p.unl import UNL
 from pyp2p.dht_msg import DHT
 import time
 
+from twisted.internet import reactor
+# reactor.run()
 
+
+print('here')
 # Start existing's server direct connection.
-node_dht = DHT()
+node_dht = DHT(debug=1)
+print('hello')
 node_direct = Net(passive_bind="192.168.0.45", passive_port=44444, interface="eth0:2",
                   net_type="direct", dht_node=node_dht, debug=1)
 node_direct.start()
 
 # Start client direct connect.
 client_dht = DHT()
+print(client_dht)
 client_direct = Net(passive_bind="192.168.0.44", passive_port=44445, interface="eth0:1",
                     net_type="direct", node_type="active", dht_node=client_dht, debug=1)
+print(client_direct)
 client_direct.start()
 
 

@@ -1,5 +1,8 @@
 # common files
 env
+python3.3
+pythontwo
+*.pyc
 
 # PyCharm
 .idea
