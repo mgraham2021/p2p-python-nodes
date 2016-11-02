@@ -2,6 +2,9 @@ from kademlia.network import Server
 from twisted.internet import reactor
 
 
+nodes = ['node_one', 'node_two', 'node_three', 'node_four']
+d = {}
+
 def done(result):
     print ("Key result:", result)
     reactor.stop()
@@ -15,13 +18,14 @@ def bootstrapDone(found, server):
     server.set("a key", "a value").addCallback(setDone, server)
 
 
+def child():
+    ip_address_counter = 1
+    for node in nodes:
+        port = 8468 + ip_address_counter
+        print(port)
+        print(node)
+        d[node] = Server()
+        d[node].listen(port)
+        d[node].bootstrap([('127.0.0.{}'.format(ip_address_counter), port)]).addCallback(bootstrapDone, d[node])
 
-
-def child(ip_address_counter):
-    port = 8468 + ip_address_counter
-    print(port)
-    server = Server()
-    server.listen(port)
-    server.bootstrap([('127.0.0.{}'.format(ip_address_counter),
-                           port)]).addCallback(bootstrapDone, server)
-
+        ip_address_counter += 1

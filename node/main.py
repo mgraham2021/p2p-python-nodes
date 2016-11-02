@@ -16,7 +16,7 @@ def main():
     #     pid = os.fork()
     #     if pid == 0:
     #         ip_address_counter += 1
-    child(ip_address_counter)
+    child()
 
     print('parent')
     reactor.run()

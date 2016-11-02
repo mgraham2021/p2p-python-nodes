@@ -1,5 +1,6 @@
 # common files
 env
+venv
 python3.3
 pythontwo
 *.pyc
