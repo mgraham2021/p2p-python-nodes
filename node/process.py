@@ -1,7 +1,7 @@
 from kademlia.network import Server
 from twisted.internet import reactor
 
-from utils.init_data import load_initial_data
+from utils.init_data import load_initial_data, return_initial_data
 
 nodes = ['node_one', 'node_two', 'node_three', 'node_four']
 d = {}
@@ -25,10 +25,12 @@ def bootstrapDone(found, server):
     node_list = server.inetVisibleIP()
     print(str(node_list))
 
-    if bootstrap_default_data == True:
+    if bootstrap_default_data:
         load_initial_data(server)
         bootstrap_default_data = False
         print('Initial data loaded into network')
+        return_initial_data(server)
+
 
 
 def set_key(server, key, value):
@@ -43,8 +45,7 @@ def child():
     ip_address_counter = 1
     for node in nodes:
         port = 8468 + ip_address_counter
-        print(port)
-        print(node)
+        print(node + ' listening on port ' + str(port))
         d[node] = Server()
         d[node].listen(port)
         d[node].bootstrap([('127.0.0.{}'.format(ip_address_counter), port)]).addCallback(bootstrapDone, d[node])
