@@ -1,61 +1,25 @@
-
-# on message
-# create direct connect node
-# send message
-# have receiving node broadcast the message to other peers
-
-from pyp2p.net import *
-from pyp2p.unl import UNL
-from pyp2p.dht_msg import DHT
-import time
-
 from twisted.internet import reactor
-# reactor.run()
+from twisted.python import log
+from kademlia.network import Server
+import sys
+
+log.startLogging(sys.stdout)
 
 
-print('here')
-# Start existing's server direct connection.
-node_dht = DHT(debug=1)
-print('hello')
-node_direct = Net(passive_bind="192.168.0.45", passive_port=44444, interface="eth0:2",
-                  net_type="direct", dht_node=node_dht, debug=1)
-node_direct.start()
-
-# Start client direct connect.
-client_dht = DHT()
-print(client_dht)
-client_direct = Net(passive_bind="192.168.0.44", passive_port=44445, interface="eth0:1",
-                    net_type="direct", node_type="active", dht_node=client_dht, debug=1)
-print(client_direct)
-client_direct.start()
+def done(result):
+    print ("Key result:", result)
+    reactor.stop()
 
 
-# Callbacks.
-def success(con):
-    print("Client successfully connected to Server.")
-    con.send_line("Request.")
+def setDone(result, server):
+    server.get("a key").addCallback(done)
 
 
-def failure(con):
-    print("Client failed to connect to Server\a")
+def bootstrapDone(found, server):
+    server.set("a key", "a value").addCallback(setDone, server)
 
-events = {
-    "success": success,
-    "failure": failure
-}
+server = Server()
+server.listen(8468)
+server.bootstrap([('127.0.0.1', 8468)]).addCallback(bootstrapDone, server)
 
-# Have the client connect to server.
-client_direct.unl.connect(node_direct.unl.construct(), events)
-
-# Event loop.
-while 1:
-    # client get reply.
-    for con in client_direct:
-        for reply in con:
-            print(reply)
-
-    # Server node accept con.
-    for con in node_direct:
-        x = 1
-
-time.sleep(0.5)
+reactor.run()
