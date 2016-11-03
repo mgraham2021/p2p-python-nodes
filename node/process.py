@@ -5,6 +5,9 @@ from twisted.internet import reactor
 nodes = ['node_one', 'node_two', 'node_three', 'node_four']
 d = {}
 
+bootstrap_default_data = True
+
+
 def done(result):
     print ("Key result:", result)
     reactor.stop()
@@ -15,7 +18,21 @@ def setDone(result, server):
 
 
 def bootstrapDone(found, server):
-    server.set("a key", "a value").addCallback(setDone, server)
+    global bootstrap_default_data
+    print('Node connected to the network')
+
+    if bootstrap_default_data == True:
+        server.set(1, [0, 'init'])
+        server.set(2, [1, 'hello'])
+        server.set(3, [2, 'second'])
+        server.set(4, [3, 'datas'])
+
+        bootstrap_default_data = False
+        print('Initial data loaded into network')
+
+
+def set_key(server, key, value):
+    server.set(key, value)
 
 
 def child():
