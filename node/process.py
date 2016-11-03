@@ -21,6 +21,9 @@ def setDone(result, server):
 def bootstrapDone(found, server):
     global bootstrap_default_data
     print('Node connected to the network')
+    neighbors = server.bootstrappableNeighbors()
+    print('This is the neighbors {0}'.format(neighbors))
+
     print('Current node list:')
     node_list = server.inetVisibleIP()
     print(str(node_list))
@@ -29,8 +32,6 @@ def bootstrapDone(found, server):
         load_initial_data(server)
         bootstrap_default_data = False
         print('Initial data loaded into network')
-        return_initial_data(server)
-
 
 
 def set_key(server, key, value):
