@@ -2,24 +2,13 @@ from twisted.internet import reactor
 from twisted.python import log
 from kademlia.network import Server
 import sys
-from random import randint
 
 log.startLogging(sys.stdout)
 
 
-def done(result):
-    print ("Key result:", result)
-
-    # reactor.stop()
-
-
-def setDone(result, server, key):
-    server.get("{}".format(key)).addCallback(done)
-
-
 def bootstrapDone(found, server):
-    key = randint(0, 999)
-    server.set("{}".format(key), "a value").addCallback(setDone, server, key)
+   neighbors = server.bootstrappableNeighbors()
+   print('This is the neighbors {0}'.format(neighbors))
 
 server = Server()
 server.listen(8468)
