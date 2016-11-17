@@ -1,2 +1,4 @@
 pyp2p
 psutil
+kademlia
+zope
