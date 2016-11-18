@@ -1,6 +1,7 @@
 from kademlia.network import Server
 from twisted.internet import reactor
 
+from utils.defaults import intial_node
 from utils.init_data import load_initial_data, return_initial_data
 
 nodes = ['node_one', 'node_two', 'node_three', 'node_four']
@@ -43,7 +44,11 @@ def get_key(server, key):
 
 
 def child():
-    ip_address_counter = 1
+    server = Server()
+    server.listen(8467)
+    server.bootstrap(intial_node).addCallback(bootstrapDone, server)
+
+    ip_address_counter = 2
     for node in nodes:
         port = 8468 + ip_address_counter
         print(node + ' listening on port ' + str(port))

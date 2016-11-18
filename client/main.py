@@ -3,6 +3,8 @@ from twisted.python import log
 from kademlia.network import Server
 import sys
 
+from utils.defaults import intial_node
+
 log.startLogging(sys.stdout)
 
 
@@ -28,6 +30,6 @@ def main():
 
     server = Server()
     server.listen(8500)
-    server.bootstrap([('127.0.0.1', 8500)]).addCallback(bootstrapDone, server, key, data)
+    server.bootstrap(intial_node).addCallback(bootstrapDone, server, key, data)
 
     reactor.run()
