@@ -10,7 +10,10 @@ log.startLogging(sys.stdout)
 
 def done(result):
     print ("Key result:", result)
-    reactor.stop()
+
+
+def result(result):
+    print ("Key result:", result)
 
 
 def setDone(result, server, key):
@@ -21,15 +24,28 @@ def bootstrapDone(found, server, key, data):
     server.set(key, data).addCallback(setDone, server, key)
 
 
+def bootstrap(found, server, key):
+    server.get(key).addCallback(result)
+
+
 def main():
-    key = raw_input("Enter key: ")
-    print ("you entered key: {}".format(key))
+    option = raw_input("Options (1) lookup  // (2) add data: \n")
+    if option == '1':
 
-    data = raw_input("Enter data: ")
-    print ("you entered key: {}".format(data))
+        key = raw_input("Enter key: ")
+        print ("you entered key: {}".format(key))
+        server = Server()
+        server.listen(8500)
+        server.bootstrap(intial_node).addCallback(bootstrap, server, key)
+    elif option == '2':
+        key = raw_input("Enter key: ")
+        print ("you entered key: {}".format(key))
 
-    server = Server()
-    server.listen(8500)
-    server.bootstrap(intial_node).addCallback(bootstrapDone, server, key, data)
+        data = raw_input("Enter data: ")
+        print ("you entered key: {}".format(data))
+
+        server = Server()
+        server.listen(8500)
+        server.bootstrap(intial_node).addCallback(bootstrapDone, server, key, data)
 
     reactor.run()
