@@ -17,4 +17,4 @@ https://github.com/bmuller/kademlia
 
 All instances of clients and server clusters will connect to the same network.  Clients are lightweight
 stateless connection interface.  On the other hand, the server nodes save state frequently to
-file, as well as on node failure. 
+file, as well as on node failure.

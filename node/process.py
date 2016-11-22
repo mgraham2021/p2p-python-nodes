@@ -25,10 +25,6 @@ def bootstrapDone(found, server):
     neighbors = server.bootstrappableNeighbors()
     print('This is the neighbors {0}'.format(neighbors))
 
-    print('Current node list:')
-    node_list = server.inetVisibleIP()
-    print(str(node_list))
-
     if bootstrap_default_data:
         load_initial_data(server)
         bootstrap_default_data = False
@@ -54,6 +50,7 @@ def child():
         print(node + ' listening on port ' + str(port))
         d[node] = Server()
         d[node].listen(port)
-        d[node].bootstrap([('127.0.0.{}'.format(ip_address_counter), port)]).addCallback(bootstrapDone, d[node])
+        d[node].bootstrap(intial_node).addCallback(bootstrapDone, d[node])
+        d[node].saveStateRegularly('./state.txt', 20)
 
         ip_address_counter += 1
